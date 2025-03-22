@@ -24,6 +24,7 @@ from utils import stick, renderer, rl_utils
 warnings.filterwarnings("ignore")
 torch.set_default_tensor_type('torch.FloatTensor')
 
+
 parser = argparse.ArgumentParser(description="X-ray adversarial attack.")
 # for model
 parser.add_argument('--seed', default=0, type=int,
@@ -40,11 +41,11 @@ parser.add_argument("--batch_size", default=10, type=int,
 parser.add_argument("--num_workers", default=4, type=int, 
                     help="the number of workers of the data loader")
 # for patch
-parser.add_argument("--obj_path", default="objs/ball_small.obj", type=str, #초기 3D 적대적 객체 obj 파일의 위치 지정
+parser.add_argument("--obj_path", default="objs/simple_door_key2.obj", type=str, #초기 3D 적대적 객체 obj 파일의 위치 지정
                     help="the path of adversarial 3d object file")
-parser.add_argument("--patch_size", default=20, type=int, #패치의 사이즈
+parser.add_argument("--patch_size", default=35, type=int, #패치의 사이즈
                     help="the size of X-ray patch")
-parser.add_argument("--patch_count", default=4, type=int, #적대적 패치의 숫자
+parser.add_argument("--patch_count", default=1, type=int, #적대적 패치의 숫자
                     help="the number of X-ray patch")
 parser.add_argument("--patch_place", default="reinforce", type=str, choices=['none', 'fix', 'fix_patch', 'reinforce'],
                     help="the place where the X-ray patch located") #적대적 객체의 위치 지정
@@ -59,7 +60,7 @@ parser.add_argument("--beta", default=0.01, type=float,
                     help="the perceptual loss rate of attack") #지각적 손실 (즉, 왜곡에 대한 부분)
 parser.add_argument("--num_iters", default=24, type=int, #반복수 설정
                     help="the number of iterations of attack")
-parser.add_argument("--save_path", default="../results", type=str,
+parser.add_argument("--save_path", default="./results", type=str,
                     help="the save path of adversarial examples")
 
 timer = time.time()
@@ -82,17 +83,91 @@ args.save_path = os.path.join(args.save_path, f"{args.dataset}/{args.patch_mater
 fix_seed(args.seed)
 print(args)
 
+#---------------------------- new function ----------------------------------
 #전체 지각손실함수 부분
-def shape_loss(vertices_ori, vertices_adv):
+def shape_loss(
+    vertices_ori, 
+    vertices_adv,
+    z_weight=1.0,
+    mask=None
+):
     """
-    두 텐서 간 L2 거리로, 원본 열쇠 메쉬와 
-    현재 업데이트된 메쉬가 얼마나 달라졌는지를 측정.
-    vertices_ori, vertices_adv: (N, 3)
+    원본 열쇠 메쉬(vertices_ori)와 업데이트된 메쉬(vertices_adv) 간 L2 거리를 계산하되,
+    z축 변화에는 z_weight 가중치를 곱해 두께 변화를 억제하는 간단한 함수.
     """
-    # 모든 정점 좌표 차이를 L2 Norm으로 구한 뒤 평균
+    # (1) 좌표 차이 계산
     diff = vertices_adv - vertices_ori
-    return torch.mean(torch.norm(diff, p=2, dim=1))
+    dx = diff[:, 0]
+    dy = diff[:, 1]
+    dz = diff[:, 2]
 
+    # (2) z축에 가중치 부여
+    dist_all = torch.sqrt(dx**2 + dz**2 + (z_weight * dy)**2 + 1e-8)
+
+    # (3) 마스크가 있다면, 그 부분만 평균
+    #     예: groove_mask, blade_mask 등
+    if mask is not None:
+        dist_all = dist_all[mask]
+        if dist_all.numel() == 0:
+            return torch.tensor(0.0, device=vertices_adv.device)
+    
+    # (4) 전체 평균
+    return dist_all.mean()
+
+def load_groove_coords(txt_path, mean=0.5, std=1/2.4):
+    """
+    txt 파일에서 'v x y z' 형태의 좌표를 불러오고,
+    정규화를 적용하여 (M, 3) shape의 텐서로 반환.
+    """
+    coords = []
+    with open(txt_path, "r") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+            tokens = line.split()
+            if tokens[0] == 'v':
+                x, y, z = float(tokens[1]), float(tokens[2]), float(tokens[3])
+                coords.append([x, y, z])
+    groove_coords = torch.tensor(coords, dtype=torch.float32)
+    
+    #축 변경
+    temp_y = groove_coords[:, 1].clone()
+    groove_coords[:, 1] = groove_coords[:, 2]  # Y <- Z
+    groove_coords[:, 2] = -temp_y   
+    # 정규화 적용: OBJ에서 사용한 것과 동일하게
+    groove_coords = (groove_coords * std) + mean
+    
+    return groove_coords
+
+
+def create_groove_mask(vertices, groove_coords):
+    """
+    vertices: (N, 3) - OBJ에서 불러온 전체 정점 (GPU에 있음)
+    groove_coords: (M, 3) - txt 파일에서 불러온, 정규화된 홈 정점 좌표 (CPU 또는 GPU)
+    
+    반환: groove_mask: (N,) bool 텐서
+          각 정점이 홈 영역이면 True.
+          오직 완전히 동일한 좌표인 경우에만 True로 처리.
+    """
+    N = vertices.shape[0]
+    groove_mask = torch.zeros(N, dtype=torch.bool, device=vertices.device)
+    
+    # groove_coords를 vertices와 동일한 디바이스로 이동
+    groove_coords = groove_coords.to(vertices.device)
+    
+    # 각 groove 좌표와 정확히 동일한 정점을 찾아 True로 설정
+    for gc in groove_coords:
+        # 각 정점과 gc가 완전히 같은지 비교 (모든 좌표값이 동일해야 함)
+        equal_mask = (vertices == gc).all(dim=1)  # (N,) bool 텐서
+        groove_mask |= equal_mask  # OR 연산을 통해 해당 정점을 마스킹
+        
+    # 디버깅: True인 정점 개수 출력
+    true_count = groove_mask.sum().item()
+    print(f"🛠️ Groove Mask Debug: {true_count}개의 정점이 홈 영역으로 설정됨.")
+    return groove_mask
+
+#---------------------------------------------------------------------------
 
 #고정된 위치에 적대적 객체 위치
 def get_place_fix(images, bboxes):
@@ -211,16 +286,17 @@ def attack(images, bboxes, labels, net, trainer): #(이미지들,bbox정보, 정
     bboxes = [b.cuda() for b in bboxes]
     labels = [l.cuda() for l in labels] #Gpu로 이동
 
+    #홈 부분의 정점들 로드
+    groove_coords = load_groove_coords("groove_points.txt")  # (M, 3)
+    
     # create a group of patch objects which have same faces
     # we only optimize the coordinate of vertices
     # but not to change the adjacent relation
     group = []
     for _ in range(args.patch_count):
         vertices, faces = renderer.load_from_file(args.obj_path) #3D object의 점과 면을 불러옴
+        groove_mask = create_groove_mask(vertices, groove_coords)
         group.append(vertices.unsqueeze(0))
-
-    print("this is test ---------")
-    print(group)
     
     adj_ls = renderer.adj_list(vertices, faces) #vertices를 연결하는 line
     
@@ -268,15 +344,21 @@ def attack(images, bboxes, labels, net, trainer): #(이미지들,bbox정보, 정
                 tv_sum += tv_val
                 
                 # (2) Shape 유사성 손실 (원본 열쇠 형태 유지)
-                shape_val = shape_loss(group_ori[pt], group[pt])
+                shape_val = shape_loss(
+                    group_ori[pt], 
+                    group[pt],
+                    z_weight=2.0,
+                    mask = groove_mask
+                    )
+                
                 shape_sum += shape_val
                 
-                # patch_count로 평균
+            # patch_count로 평균
             tv_sum /= args.patch_count
             shape_sum /= args.patch_count
             
             # 원하는 비율(γ)로 두 손실을 합산
-            gamma = 0.7  # 
+            gamma = 0.7  
             loss_per = tv_sum + gamma * shape_sum
         
         # clamp the group into [0, 1]
@@ -324,13 +406,21 @@ def attack(images, bboxes, labels, net, trainer): #(이미지들,bbox정보, 정
         #최종손실계산 및 역전파
         loss_adv = - loss #적대적 공격을 수행하므로 부호를 반대로 바꿔줌 (적대적 공격이니깐 손실함수가 클수록 좋으므로)
         loss_total = loss_adv + args.beta * loss_per #지각손실함수를 추가하여 패치가 너무 왜곡되지 않도록 함 (이제 최종 손실함수가 만들어짐)
+       
         #최적화 (패치 업데이트)
         optimizer.zero_grad()
         loss_total.backward() #역전파 수행
         if not args.patch_place == "fix_patch":
             inan = group.grad.isnan()
             group.grad.data[inan] = 0
-        optimizer.step() #group 텐서를 변형시킴 (즉, group을 가중치 같은걸로 보고 변형시켜 학습해나간다는 뜻)
+            
+            # 홈 이외 부분은 grad=0
+            #group.grad[:, ~groove_mask, :] = 0
+            
+            # Y축을 제외한 나머지 축의 그래디언트를 0으로 설정
+            group.grad[..., [0,2]] = 0  # X축(0)과 Z축(2)의 그래디언트를 0으로
+            
+        optimizer.step()
         '''
         group을 텐서로 변형시켜서 훈련할 수 있게 만듬
         group은 적대적 객체에 대한 3D 좌표 (vertex)를 가지고 있음
@@ -392,7 +482,6 @@ def save_img(path, img_tensor, shape):
     img = cv2.resize(img, (shape[1], shape[0]))
     cv2.imwrite(path, img)
 
-
 if __name__ == "__main__":
     if args.dataset == "OPIXray":
         data_info = config.OPIXray_test
@@ -401,7 +490,6 @@ if __name__ == "__main__":
 
     num_classes = len(data_info["model_classes"]) + 1
     net = FasterRCNNVGG16(config.FasterRCNN, num_classes - 1)
-    
     
     '''
     병렬학습 부분 수정
