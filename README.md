@@ -1,6 +1,8 @@
 # Stealth X-Adv:  Stealth Physical Adversarial Object Attacks against X-ray Prohibited Item Detection
 
-![](./assets/framework.jpg)
+![image](https://github.com/user-attachments/assets/24f229a8-7f86-40e7-9377-d1e5dec598d5)
+![image](https://github.com/user-attachments/assets/a056f2ca-ce1d-454a-8045-ebeb8b365a41)
+
 
 ## Introduction
 Stealth X-ADV is a Adversarial Object for attack X-ray Object Detector.
