@@ -1,12 +1,28 @@
-# X-Adv:  Physical Adversarial Object Attacks against X-ray Prohibited Item Detection
+# Stealth X-Adv:  Stealth Physical Adversarial Object Attacks against X-ray Prohibited Item Detection
 
 ![](./assets/framework.jpg)
 
 ## Introduction
+Stealth X-ADV is a Adversarial Object for attack X-ray Object Detector.
 
-This repository is the official PyTorch implemetation of paper "[X-Adv: Physical Adversarial Object Attacks against X-ray Prohibited Item Detection](https://arxiv.org/abs/2302.09491)".
+| Faste-RCNN (OPIXray)| X-ADV (Original) | X-ADV (Changing Depth) | Stealth X-ADV | 
+|----------|----------|----------|----------|
+|  Missing  | 430     | 245     | 299     |
+| TP   | 1144     | 1349     | 1173     |
+| FP    | 621     | 412     | 843     |
+| mAP    | 0.5344     | 0.6667     | 0.5352     |  
 
-**XAD download link: please go to [this website](https://github.com/DIG-Beihang/XrayDetection/) to acquire download link.**
+Stealth X-ADV shows a comparable mAP reduction to the original X-ADV, but offers the additional advantage of being able to deceive not only object detectors but also the human eye.  
+
+##Methodology  
+Step 1: Defining a Perceptual Loss Function  
+A custom perceptual loss function is defined to finely control the degree of distortion, allowing the adversarial object to remain inconspicuous to the human eye.  
+
+Step 2: Genetic Algorithm (GA) **[On progress]**  
+We found that directly differentiating through a large number of vertex tensors is nearly impossible. To enable effective attacks, we leverage a genetic algorithm to search for the optimal object shape.  
+
+Step 3: Few-Pixel Attack  
+For a successful attack, the adversarial object must be placed in an effective location. We identify suitable target regions on X-ray images and attach adversarial patches or stickers accordingly.  
 
 ## Install
 
