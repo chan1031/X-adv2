@@ -16,7 +16,7 @@ Stealth X-ADV is a Adversarial Object for attack X-ray Object Detector.
 
 Stealth X-ADV shows a comparable mAP reduction to the original X-ADV, but offers the additional advantage of being able to deceive not only object detectors but also the human eye.  
 
-##Methodology  
+## Methodology  
 Step 1: Defining a Perceptual Loss Function  
 A custom perceptual loss function is defined to finely control the degree of distortion, allowing the adversarial object to remain inconspicuous to the human eye.  
 
