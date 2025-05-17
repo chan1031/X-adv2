@@ -1,4 +1,4 @@
-# Stealth X-Adv:  Stealth Physical Adversarial Object Attacks against X-ray Prohibited Item Detection
+# Stealth X-Adv:  Stealth Physical Adversarial Object Attacks against X-ray Prohibited Item Detection (On Progress)
 
 ## Introduction
 Stealth X-ADV is a Adversarial Object for attack X-ray Object Detector [Faster-RCNN, SSD].  
@@ -35,7 +35,7 @@ As you can see 'Key-ADV' shows a comparable mAP reduction to the original X-ADV,
   <img src="https://github.com/user-attachments/assets/7ef2a67e-14cd-4508-87ca-34c9be814676" width="500" />
 </div>
 
-### 2)Few-Pixel Attack **(On progress) **
+### 2)Few-Pixel Attack (On progress) 
 Although Key-ADV demonstrated strong attack performance, it is limited in terms of applicable object types and poses challenges for 3D printing. Therefore, we aim to apply the existing Few-Pixel Attack as an alternative approach.
 <div align="center">
   <img src="https://github.com/user-attachments/assets/25b20944-0d4e-4e5a-bbd9-a203e0bbc370" width="600" />
