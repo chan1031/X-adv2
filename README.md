@@ -7,7 +7,10 @@
 
 
 ## Introduction
-Stealth X-ADV is a Adversarial Object for attack X-ray Object Detector.
+Stealth X-ADV is a Adversarial Object for attack X-ray Object Detector.  
+The existing adversarial attack technique for X-ray object detectors, known as X-ADV (https://github.com/DIG-Beihang/X-adv), has demonstrated effective performance in X-ray environments. However, the generated objects are highly conspicuous, making them easily noticeable in real-world settings, which increases the risk of being detected by security personnel in advance. Therefore, this study aims to enhance the stealthiness of the original X-ADV method. To achieve this, we introduce two approaches: (1) Key-ADV and (2) Few-Pixel Attack in X-ray.
+![image](https://github.com/user-attachments/assets/209f459b-1208-4c74-a096-b590a74088e2)
+
 
 | Faste-RCNN (OPIXray)| X-ADV (Original) | X-ADV (Changing Depth) | Stealth X-ADV | 
 |----------|----------|----------|----------|
