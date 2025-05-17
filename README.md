@@ -14,13 +14,14 @@ To achieve this, we introduce two approaches: **(1) Key-ADV** and **(2) Few-Pixe
 </div>  
 
 ## Methodology  
-1) Key-ADV
+1) Key-ADV  
 | Faste-RCNN (OPIXray)| X-ADV | X-ADV (Changing Depth) | Stealth X-ADV | 
 |----------|----------|----------|----------|
 |  Missing  | 430     | 245     | 299     |
 | TP   | 1144     | 1349     | 1173     |
 | FP    | 621     | 412     | 843     |
 | mAP    | 0.5344     | 0.6667     | 0.5352     |  
+
 <div align="center">
   <img src="https://github.com/user-attachments/assets/24f229a8-7f86-40e7-9377-d1e5dec598d5" width="600" />
   <img src="https://github.com/user-attachments/assets/7ef2a67e-14cd-4508-87ca-34c9be814676" width="600" />
