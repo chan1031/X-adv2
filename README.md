@@ -8,10 +8,16 @@
 
 ## Introduction
 Stealth X-ADV is a Adversarial Object for attack X-ray Object Detector.  
-The existing adversarial attack technique for X-ray object detectors, known as X-ADV (https://github.com/DIG-Beihang/X-adv), has demonstrated effective performance in X-ray environments. However, the generated objects are highly conspicuous, making them easily noticeable in real-world settings, which increases the risk of being detected by security personnel in advance. Therefore, this study aims to enhance the stealthiness of the original X-ADV method. To achieve this, we introduce two approaches: (1) Key-ADV and (2) Few-Pixel Attack in X-ray.
-![image](https://github.com/user-attachments/assets/209f459b-1208-4c74-a096-b590a74088e2)
+The existing adversarial attack technique for X-ray object detectors, known as X-ADV (https://github.com/DIG-Beihang/X-adv), has demonstrated effective performance in X-ray environments. However, the generated objects are highly conspicuous, making them easily noticeable in real-world settings, which increases the risk of being detected by security personnel in advance. Therefore, this study aims to enhance the stealthiness of the original X-ADV method. To achieve this, we introduce two approaches: (1) Key-ADV and (2) Few-Pixel Attack in X-ray.  
 
 
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/209f459b-1208-4c74-a096-b590a74088e2" width="800" />
+</div>
+(As can be seen, the original X-ADV generates objects with suspicious shapes.)
+
+## Methodology  
+1) Key-ADV
 | Faste-RCNN (OPIXray)| X-ADV (Original) | X-ADV (Changing Depth) | Stealth X-ADV | 
 |----------|----------|----------|----------|
 |  Missing  | 430     | 245     | 299     |
@@ -20,16 +26,7 @@ The existing adversarial attack technique for X-ray object detectors, known as X
 | mAP    | 0.5344     | 0.6667     | 0.5352     |  
 
 Stealth X-ADV shows a comparable mAP reduction to the original X-ADV, but offers the additional advantage of being able to deceive not only object detectors but also the human eye.  
-
-## Methodology  
-Step 1: Defining a Perceptual Loss Function  
-A custom perceptual loss function is defined to finely control the degree of distortion, allowing the adversarial object to remain inconspicuous to the human eye.  
-
-Step 2: Genetic Algorithm (GA) **[On progress]**  
-We found that directly differentiating through a large number of vertex tensors is nearly impossible. To enable effective attacks, we leverage a genetic algorithm to search for the optimal object shape.  
-
-Step 3: Few-Pixel Attack  
-For a successful attack, the adversarial object must be placed in an effective location. We identify suitable target regions on X-ray images and attach adversarial patches or stickers accordingly.  
+2)Few-Pixel Attack
 
 ## Install
 
