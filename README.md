@@ -16,7 +16,8 @@ The existing adversarial attack technique for X-ray object detectors, known as X
 </div>
 <div align="center">
   (As can be seen, the original X-ADV generates objects with suspicious shapes.)
-</div>
+</div>  
+
 ## Methodology  
 1) Key-ADV
 | Faste-RCNN (OPIXray)| X-ADV (Original) | X-ADV (Changing Depth) | Stealth X-ADV | 
