@@ -31,8 +31,8 @@ We conducted an attack by subtly adjusting the perceptual loss function to embed
 As you can see 'Key-ADV' shows a comparable mAP reduction to the original X-ADV, but offers the additional advantage of being able to deceive not only object detectors but also the human eye.  
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/24f229a8-7f86-40e7-9377-d1e5dec598d5" width="600" />
-  <img src="https://github.com/user-attachments/assets/7ef2a67e-14cd-4508-87ca-34c9be814676" width="600" />
+  <img src="https://github.com/user-attachments/assets/24f229a8-7f86-40e7-9377-d1e5dec598d5" width="500" />
+  <img src="https://github.com/user-attachments/assets/7ef2a67e-14cd-4508-87ca-34c9be814676" width="500" />
 </div>
 
 ### 2)Few-Pixel Attack **(On progress) 
