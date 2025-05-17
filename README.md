@@ -15,6 +15,7 @@ To achieve this, we introduce two approaches: **(1) Key-ADV** and **(2) Few-Pixe
 
 ## Methodology  
 1) Key-ADV  
+
 | Faste-RCNN (OPIXray)| X-ADV | X-ADV (Changing Depth) | Stealth X-ADV | 
 |----------|----------|----------|----------|
 |  Missing  | 430     | 245     | 299     |
@@ -28,7 +29,6 @@ To achieve this, we introduce two approaches: **(1) Key-ADV** and **(2) Few-Pixe
 </div>
 We conducted an attack by subtly adjusting the perceptual loss function to embed adversarial patterns into the grooves of a "key"—a common and inconspicuous item in luggage.  
 As you can see 'Key-ADV' shows a comparable mAP reduction to the original X-ADV, but offers the additional advantage of being able to deceive not only object detectors but also the human eye.  
-
 2)Few-Pixel Attack **(On progress)**
 Although Key-ADV demonstrated strong attack performance, it is limited in terms of applicable object types and poses challenges for 3D printing. Therefore, we aim to apply the existing Few-Pixel Attack as an alternative approach.
 <div align="center">
