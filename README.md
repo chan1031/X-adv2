@@ -12,7 +12,7 @@ The existing adversarial attack technique for X-ray object detectors, known as X
 
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/209f459b-1208-4c74-a096-b590a74088e2" width="800" />
+  <img src="https://github.com/user-attachments/assets/209f459b-1208-4c74-a096-b590a74088e2" width="400" />
 </div>
 (As can be seen, the original X-ADV generates objects with suspicious shapes.)
 
