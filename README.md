@@ -15,13 +15,16 @@ To achieve this, we introduce two approaches: **(1) Key-ADV** and **(2) Few-Pixe
 
 ## Methodology  
 ### **1) Key-ADV  **
+
 <div align="center">
+  
 | Faste-RCNN (OPIXray)| X-ADV | X-ADV (Changing Depth) | Stealth X-ADV | 
 |----------|----------|----------|----------|
 |  Missing  | 430     | 245     | 299     |
 | TP   | 1144     | 1349     | 1173     |
 | FP    | 621     | 412     | 843     |
-| mAP    | 0.5344     | 0.6667     | 0.5352     |  
+| mAP    | 0.5344     | 0.6667     | 0.5352     | 
+
 </div>  
 
 <div align="center">
