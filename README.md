@@ -14,7 +14,7 @@ To achieve this, we introduce two approaches: **(1) Key-ADV** and **(2) Few-Pixe
 </div>  
 
 ## Methodology  
-** ### 1) Key-ADV  **
+### 1) Key-ADV  
 
 <div align="center">
   
@@ -34,7 +34,7 @@ To achieve this, we introduce two approaches: **(1) Key-ADV** and **(2) Few-Pixe
 We conducted an attack by subtly adjusting the perceptual loss function to embed adversarial patterns into the grooves of a "key"—a common and inconspicuous item in luggage.  
 As you can see 'Key-ADV' shows a comparable mAP reduction to the original X-ADV, but offers the additional advantage of being able to deceive not only object detectors but also the human eye.  
 
-** ### 2)Few-Pixel Attack **(On progress) **
+### 2)Few-Pixel Attack **(On progress) 
 Although Key-ADV demonstrated strong attack performance, it is limited in terms of applicable object types and poses challenges for 3D printing. Therefore, we aim to apply the existing Few-Pixel Attack as an alternative approach.
 <div align="center">
   <img src="https://github.com/user-attachments/assets/25b20944-0d4e-4e5a-bbd9-a203e0bbc370" width="600" />
