@@ -18,7 +18,7 @@ To achieve this, we introduce two approaches: **(1) Key-ADV** and **(2) Few-Pixe
 
 <div align="center">
   
-| Faste-RCNN (OPIXray)| X-ADV | X-ADV (Changing Depth) | Stealth X-ADV | 
+| Faste-RCNN (OPIXray)| X-ADV | X-ADV (Changing Depth) | Stealth X-ADV (ours) | 
 |----------|----------|----------|----------|
 |  Missing  | 430     | 245     | 299     |
 | TP   | 1144     | 1349     | 1173     |
