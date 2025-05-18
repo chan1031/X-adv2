@@ -1,4 +1,4 @@
-# Stealth X-Adv:  Stealth Physical Adversarial Object Attacks against X-ray Prohibited Item Detection (On Progress)
+# Stealth X-Adv:  Stealth Physical Adversarial Object Attacks against X-ray Prohibited Item Detection [On Progress]
 
 ## Introduction
 Stealth X-ADV is a Adversarial Object for attack X-ray Object Detector [Faster-RCNN, SSD].  
