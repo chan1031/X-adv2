@@ -20,7 +20,7 @@ To achieve this, we introduce two approaches: **(1) Key-ADV** and **(2) Few-Pixe
   
 | Faste-RCNN (OPIXray)| X-ADV | X-ADV (Changing Depth) | Stealth X-ADV (ours) | 
 |----------|----------|----------|----------|
-|  Missing  | 430     | 245     | 299     |
+|  Missing Object | 430     | 245     | 299     |
 | TP   | 1144     | 1349     | 1173     |
 | FP    | 621     | 412     | 843     |
 | mAP    | 0.5344     | 0.6667     | 0.5352     | 
