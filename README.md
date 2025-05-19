@@ -3,7 +3,8 @@
 ## Introduction
 Stealth X-ADV is a Adversarial Object for attack X-ray Object Detector [Faster-RCNN, SSD].  
 The existing adversarial attack technique for X-ray object detectors, known as X-ADV (https://github.com/DIG-Beihang/X-adv), has demonstrated effective performance in X-ray environments. However, the generated objects are highly conspicuous, making them easily noticeable in real-world settings, which increases the risk of being detected by security personnel in advance. Therefore, this study aims to enhance the stealthiness of the original X-ADV method.  
-To achieve this, we introduce two approaches: **(1) Key-ADV** and **(2) Few-Pixel Attack in X-ray**.  
+To achieve this, we introduce two approaches: **(1) Key-ADV** and **(2) Few-Pixel Attack in X-ray**.
+(1) Key-ADV showed a 0.2 reduction in mAP, demonstrating a performance drop similar to the original X-ADV, while achieving even better stealth performance.
 
 
 <div align="center">
@@ -27,7 +28,7 @@ To achieve this, we introduce two approaches: **(1) Key-ADV** and **(2) Few-Pixe
 </div>  
 
 We conducted an attack by subtly adjusting the perceptual loss function to embed adversarial patterns into the grooves of a "key"—a common and inconspicuous item in luggage.  
-As you can see 'Key-ADV' shows a comparable mAP reduction to the original X-ADV, but offers the additional advantage of being able to deceive not only object detectors but also the human eye.  
+As you can see 'Key-ADV' shows a comparable mAP (0.53) reduction to the original X-ADV, but offers the additional advantage of being able to deceive not only object detectors but also the human eye.  
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/24f229a8-7f86-40e7-9377-d1e5dec598d5" width="500" />
