@@ -15,7 +15,7 @@ To achieve this, we introduce two approaches: **(1) Key-ADV** and **(2) Few-Pixe
 </div>  
 
 ## Methodology  
-### 1) Key-ADV  
+### 1) Key-ADV: 'Key' but 'Adversarial'
 
 <div align="center">
 
